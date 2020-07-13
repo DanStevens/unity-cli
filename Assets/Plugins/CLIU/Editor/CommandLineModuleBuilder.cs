@@ -57,7 +57,7 @@ namespace CLUI.Editor
             GameObject module = new GameObject(moduleName);
             CommandLineModuleSettings settings = module.AddComponent<CommandLineModuleSettings>();
             settings.moduleInternalCode = moduleCode;
-            PrefabUtility.CreatePrefab("Assets/Plugins/CLIU/Resources/CLIU Modules/" + moduleName + ".prefab", module);
+            PrefabUtility.SaveAsPrefabAsset(module, "Assets/Plugins/CLIU/Resources/CLIU Modules/" + moduleName + ".prefab");
             DestroyImmediate(module);
         }
 
