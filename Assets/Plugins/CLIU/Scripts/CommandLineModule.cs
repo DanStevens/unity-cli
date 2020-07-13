@@ -3,45 +3,41 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 
-[RequireComponent(typeof(CommandLineModuleSettings))]
-public abstract class CommandLineModule : MonoBehaviour {
-
-    public Dictionary<string, System.Action<string[]>> commands = new Dictionary<string, System.Action<string[]>>();
-
-    public void Execute(string[] args)
+namespace CLUI
+{
+    [RequireComponent(typeof(CommandLineModuleSettings))]
+    public abstract class CommandLineModule : MonoBehaviour
     {
-        try
+
+        public Dictionary<string, System.Action<string[]>> commands = new Dictionary<string, System.Action<string[]>>();
+
+        public void Execute(string[] args)
         {
-            string command = args[1].ToLower();
-            if (args[0].ToLower() == "h" || args[0].ToLower() == "-h" || args[0].ToLower() == "help" ||
-                command == "h" || command == "-h" || command == "help")
-            {
-                Help();
-            }
-            else if (commands.ContainsKey(command))
-            {
-                commands[command](args);
+            try {
+                string command = args[1].ToLower();
+                if (args[0].ToLower() == "h" || args[0].ToLower() == "-h" || args[0].ToLower() == "help" ||
+                    command == "h" || command == "-h" || command == "help") {
+                    Help();
+                } else if (commands.ContainsKey(command)) {
+                    commands[command](args);
+                }
+            } catch (System.Exception e) {
+                CommandLineCore.PrintError(e.ToString());
             }
         }
-        catch (System.Exception e)
-        {
-            CommandLineCore.PrintError(e.ToString());
-        }        
-    }
 
-    public virtual void Help()
-    {
-        StringBuilder builder = new StringBuilder();
-        int counter = 0;
-        foreach (var item in commands)
+        public virtual void Help()
         {
-            builder.Append(item.Key);
-            counter++;
-            if (counter < commands.Count)
-            {
-                builder.Append("\n");
+            StringBuilder builder = new StringBuilder();
+            int counter = 0;
+            foreach (var item in commands) {
+                builder.Append(item.Key);
+                counter++;
+                if (counter < commands.Count) {
+                    builder.Append("\n");
+                }
             }
+            CommandLineCore.Print(builder.ToString());
         }
-        CommandLineCore.Print(builder.ToString());
     }
 }

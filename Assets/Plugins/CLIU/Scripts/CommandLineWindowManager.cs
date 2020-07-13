@@ -1,52 +1,51 @@
 ﻿using UnityEngine;
 
-/// <summary>
-/// This script handles what screens should appear or disappear based on certain events
-/// </summary>
-public class CommandLineWindowManager : MonoBehaviour {
+namespace CLUI
+{
 
-    public GameObject window;
-    public CommandLineCore commandLineCore;
-    public GameObject buttonOpenWindow;
-	
-	void Update () {
-        if (commandLineCore.openWindowHotkey != "" && commandLineCore.openWindowHotkey != null)
+    /// <summary>
+    /// This script handles what screens should appear or disappear based on certain events
+    /// </summary>
+    public class CommandLineWindowManager : MonoBehaviour
+    {
+
+        public GameObject window;
+        public CommandLineCore commandLineCore;
+        public GameObject buttonOpenWindow;
+
+        void Update()
         {
-            if (!window.activeSelf && Input.GetKeyDown(commandLineCore.openWindowHotkey))
-            {
-                OpenCLIUWindow();
+            if (commandLineCore.openWindowHotkey != "" && commandLineCore.openWindowHotkey != null) {
+                if (!window.activeSelf && Input.GetKeyDown(commandLineCore.openWindowHotkey)) {
+                    OpenCLIUWindow();
+                }
             }
-        }        
 
-        if (commandLineCore.closeWindowHotkey != "" && commandLineCore.closeWindowHotkey != null)
-        {
-            if (window.activeSelf && Input.GetKeyDown(commandLineCore.closeWindowHotkey))
-            {
-                CloseCLIUWindow();
+            if (commandLineCore.closeWindowHotkey != "" && commandLineCore.closeWindowHotkey != null) {
+                if (window.activeSelf && Input.GetKeyDown(commandLineCore.closeWindowHotkey)) {
+                    CloseCLIUWindow();
+                }
+            }
+
+            if (commandLineCore.resetWindowHotkey != "" && commandLineCore.resetWindowHotkey != null) {
+                if (Input.GetKeyDown(commandLineCore.resetWindowHotkey)) {
+                    commandLineCore.RunCommand(new string[1] { "reset" });
+                }
             }
         }
 
-        if (commandLineCore.resetWindowHotkey != "" && commandLineCore.resetWindowHotkey != null)
+        public void OpenCLIUWindow()
         {
-            if (Input.GetKeyDown(commandLineCore.resetWindowHotkey))
-            {
-                commandLineCore.RunCommand(new string[1] { "reset" });
-            }
+            window.SetActive(true);
+            buttonOpenWindow.SetActive(false);
         }
-    }
 
-    public void OpenCLIUWindow()
-    {
-        window.SetActive(true);
-        buttonOpenWindow.SetActive(false);
-    }
-
-    public void CloseCLIUWindow()
-    {
-        window.SetActive(false);
-        if (!commandLineCore.hideOpenWindowButton)
+        public void CloseCLIUWindow()
         {
-            buttonOpenWindow.SetActive(true);
+            window.SetActive(false);
+            if (!commandLineCore.hideOpenWindowButton) {
+                buttonOpenWindow.SetActive(true);
+            }
         }
     }
 }

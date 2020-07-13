@@ -1,61 +1,66 @@
-﻿using System.Collections;
+﻿using CLUI;
+using System.Collections;
 using System.Text;
 using UnityEngine;
 
-public class CommandLineModuleTime : CommandLineModule {
-
-    private void Start()
+namespace CLUI.Modules
+{
+    public class CommandLineModuleTime : CommandLineModule
     {
-        commands.Add("timescale", TimeScale);
-        commands.Add("slowmo", SlowMo);
-        commands.Add("slomo", SlowMo);
-        commands.Add("slowmotion", SlowMo);
-        commands.Add("devicetime", DeviceTime);
-        commands.Add("currenttimescale", CurrentTimeScale);
-        commands.Add("currentts", CurrentTimeScale);
-    }
 
-    public override void Help()
-    {
-        StringBuilder helpMessage = new StringBuilder();
+        private void Start()
+        {
+            commands.Add("timescale", TimeScale);
+            commands.Add("slowmo", SlowMo);
+            commands.Add("slomo", SlowMo);
+            commands.Add("slowmotion", SlowMo);
+            commands.Add("devicetime", DeviceTime);
+            commands.Add("currenttimescale", CurrentTimeScale);
+            commands.Add("currentts", CurrentTimeScale);
+        }
 
-        helpMessage.Append("timescale float:amount\n");
-        helpMessage.Append("slowmo float:amount float:duration\n");
-        helpMessage.Append("devicetime\n");
-        helpMessage.Append("currenttimescale");
+        public override void Help()
+        {
+            StringBuilder helpMessage = new StringBuilder();
 
-        CommandLineCore.Print(helpMessage.ToString());
-    }
+            helpMessage.Append("timescale float:amount\n");
+            helpMessage.Append("slowmo float:amount float:duration\n");
+            helpMessage.Append("devicetime\n");
+            helpMessage.Append("currenttimescale");
 
-    private void TimeScale(string[] args)
-    {
-        string amount = args[2];
-        Time.timeScale = float.Parse(amount);
-        CommandLineCore.Print("TimeScale set to " + Time.timeScale);
-    }
+            CommandLineCore.Print(helpMessage.ToString());
+        }
 
-    private void SlowMo(string[] args)
-    {
-        string amount = args[2];
-        string duration = args[3];
-        StartCoroutine(ActivateSlowMo(float.Parse(amount), float.Parse(duration)));
-    }
+        private void TimeScale(string[] args)
+        {
+            string amount = args[2];
+            Time.timeScale = float.Parse(amount);
+            CommandLineCore.Print("TimeScale set to " + Time.timeScale);
+        }
 
-    IEnumerator ActivateSlowMo(float amount, float duration)
-    {
-        float previousTimeScale = Time.timeScale;
-        Time.timeScale = amount;
-        yield return new WaitForSecondsRealtime(duration);
-        Time.timeScale = previousTimeScale;
-    }
+        private void SlowMo(string[] args)
+        {
+            string amount = args[2];
+            string duration = args[3];
+            StartCoroutine(ActivateSlowMo(float.Parse(amount), float.Parse(duration)));
+        }
 
-    private void DeviceTime(string[] args)
-    {
-        CommandLineCore.Print(System.DateTime.Now.ToString());
-    }
+        IEnumerator ActivateSlowMo(float amount, float duration)
+        {
+            float previousTimeScale = Time.timeScale;
+            Time.timeScale = amount;
+            yield return new WaitForSecondsRealtime(duration);
+            Time.timeScale = previousTimeScale;
+        }
 
-    private void CurrentTimeScale(string[] args)
-    {
-        CommandLineCore.Print("Current TimeScale: " + Time.timeScale);
+        private void DeviceTime(string[] args)
+        {
+            CommandLineCore.Print(System.DateTime.Now.ToString());
+        }
+
+        private void CurrentTimeScale(string[] args)
+        {
+            CommandLineCore.Print("Current TimeScale: " + Time.timeScale);
+        }
     }
 }
